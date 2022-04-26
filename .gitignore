@@ -1,0 +1,48 @@
+### общие исключения
+# IDE
+.idea/
+
+# dev backups
+*bak20*
+*bak-20*
+
+# cache
+.sass-cache/
+
+## если гит выше корня сайта
+/public/upload/
+/public/.Trash*/
+/public/yml-catalogs/*.yml
+/public/robots.txt
+/public/sitemap*.xml
+/public/local/vendor/
+/public/local/php_interface/include/env_vars.php
+/public/pathLog.txt
+/public/_s/
+
+### Битрикс
+
+## если гит выше корня сайта
+
+# configs
+/public/bitrix/php_interface/dbconn.php
+/public/bitrix/.settings.php
+/public/bitrix/.settings_extra.php
+
+# backups
+/public/bitrix/backup
+!/public/bitrix/backup/index.php
+
+# logs
+/public/bitrix/*.log
+/public/bitrix/modules/updater.log
+/public/bitrix/modules/updater_partner.log
+
+# cache 
+/public/bitrix/cache
+/public/bitrix/managed_cache
+/public/bitrix/stack_cache
+/public/bitrix/html_pages
+
+### exports
+/public/bitrix/catalog_export

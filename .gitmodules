@@ -1,0 +1,3 @@
+[submodule "public/bitrix"]
+	path = public/bitrix
+	url = https://github.com/KiselevichAlexey/photo-album-bitrix.git
