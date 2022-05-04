@@ -12,28 +12,43 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true) die();
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
 $this->setFrameMode(false);
-
+/*
 if (!empty($arResult["ERRORS"])):?>
 	<?ShowError(implode("<br />", $arResult["ERRORS"]))?>
-<?endif;
+<?endif;*/
+
 if ($arResult["MESSAGE"] <> ''):?>
 	<?ShowNote($arResult["MESSAGE"])?>
 <?endif?>
-<form name="iblock_add" action="<?=POST_FORM_ACTION_URI?>" method="post" enctype="multipart/form-data">
+
+<?//='<pre>'.print_r($arParams,1).'</pre>'?>
+<div class="container">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h2><?=GetMessage('TITLE')?></h2>
+        <p class="lead">Below is an example form built entirely with Bootstrap's form controls. Each required form group has a validation state that can be triggered by attempting to submit the form without completing it.</p>
+      </div>
+      <div class="row">
+        </div>
+        <div class="col-md-12 order-md-1">
+          <div class="mess"></div>
+<form name="iblock_add" action="" method="post" enctype="multipart/form-data">
 	<?=bitrix_sessid_post()?>
-	<?if ($arParams["MAX_FILE_SIZE"] > 0):?><input type="hidden" name="MAX_FILE_SIZE" value="<?=$arParams["MAX_FILE_SIZE"]?>" /><?endif?>
-	<table class="data-table" style="width: 90%">
-		<thead>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-		</thead>
+	<input type="hidden" name="PROPERTY[IBLOCK_SECTION][0]" value="<?=$arParams['IBLOCK_SECTION_ID']?>">
+	<?if ($arParams["MAX_FILE_SIZE"] > 0):?><input class="form-control" type="hidden" name="MAX_FILE_SIZE" value="<?=$arParams["MAX_FILE_SIZE"]?>" /><?endif?>
 		<?if (is_array($arResult["PROPERTY_LIST"]) && !empty($arResult["PROPERTY_LIST"])):?>
-		<tbody>
 			<?foreach ($arResult["PROPERTY_LIST"] as $propertyID):?>
-				<tr>
-					<td><?if (intval($propertyID) > 0):?><?=$arResult["PROPERTY_LIST_FULL"][$propertyID]["NAME"]?><?else:?><?=!empty($arParams["CUSTOM_TITLE_".$propertyID]) ? $arParams["CUSTOM_TITLE_".$propertyID] : GetMessage("IBLOCK_FIELD_".$propertyID)?><?endif?><?if(in_array($propertyID, $arResult["PROPERTY_REQUIRED"])):?><span class="starrequired">*</span><?endif?></td>
-					<td>
+				<?
+				if (intval($propertyID) > 0){
+					$propName=$arResult["PROPERTY_LIST_FULL"][$propertyID]["NAME"];
+				}else{
+				 	$propName=!empty($arParams["CUSTOM_TITLE_".$propertyID]) ? $arParams["CUSTOM_TITLE_".$propertyID] : GetMessage("IBLOCK_FIELD_".$propertyID);
+				};
+				?>
+				<label for="username"><?=$propName?><?if(in_array($propertyID, $arResult["PROPERTY_REQUIRED"])):?><span class="starrequired">*</span><?endif?></label>
+              		<div class="input-group">
+					
+					
 						<?
 						if (intval($propertyID) > 0)
 						{
@@ -204,7 +219,7 @@ if ($arResult["MESSAGE"] <> ''):?>
 										$value = "";
 									}
 								?>
-								<input type="text" name="PROPERTY[<?=$propertyID?>][<?=$i?>]" size="<?=$arResult["PROPERTY_LIST_FULL"][$propertyID]["COL_COUNT"]; ?>" value="<?=$value?>" /><br /><?
+								<input class="form-control" type="text" name="PROPERTY[<?=$propertyID?>][<?=$i?>]" size="<?=$arResult["PROPERTY_LIST_FULL"][$propertyID]["COL_COUNT"]; ?>" value="<?=$value?>" /><br /><?
 								if($arResult["PROPERTY_LIST_FULL"][$propertyID]["USER_TYPE"] == "DateTime"):?><?
 									$APPLICATION->IncludeComponent(
 										'bitrix:main.calendar',
@@ -228,14 +243,14 @@ if ($arResult["MESSAGE"] <> ''):?>
 								{
 									$value = intval($propertyID) > 0 ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE"] : $arResult["ELEMENT"][$propertyID];
 									?>
-						<input type="hidden" name="PROPERTY[<?=$propertyID?>][<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>]" value="<?=$value?>" />
-						<input type="file" size="<?=$arResult["PROPERTY_LIST_FULL"][$propertyID]["COL_COUNT"]?>"  name="PROPERTY_FILE_<?=$propertyID?>_<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>" /><br />
+						<input class="form-control" type="hidden" name="PROPERTY[<?=$propertyID?>][<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>]" value="<?=$value?>" />
+						<input  type="file" size="<?=$arResult["PROPERTY_LIST_FULL"][$propertyID]["COL_COUNT"]?>"  name="PROPERTY_FILE_<?=$propertyID?>_<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>" /><br />
 									<?
 
 									if (!empty($value) && is_array($arResult["ELEMENT_FILES"][$value]))
 									{
 										?>
-					<input type="checkbox" name="DELETE_FILE[<?=$propertyID?>][<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>]" id="file_delete_<?=$propertyID?>_<?=$i?>" value="Y" /><label for="file_delete_<?=$propertyID?>_<?=$i?>"><?=GetMessage("IBLOCK_FORM_FILE_DELETE")?></label><br />
+					<input class="form-control" type="checkbox" name="DELETE_FILE[<?=$propertyID?>][<?=$arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] ? $arResult["ELEMENT_PROPERTIES"][$propertyID][$i]["VALUE_ID"] : $i?>]" id="file_delete_<?=$propertyID?>_<?=$i?>" value="Y" /><label for="file_delete_<?=$propertyID?>_<?=$i?>"><?=GetMessage("IBLOCK_FORM_FILE_DELETE")?></label><br />
 										<?
 
 										if ($arResult["ELEMENT_FILES"][$value]["IS_IMAGE"])
@@ -289,7 +304,7 @@ if ($arResult["MESSAGE"] <> ''):?>
 											}
 
 											?>
-							<input type="<?=$type?>" name="PROPERTY[<?=$propertyID?>]<?=$type == "checkbox" ? "[".$key."]" : ""?>" value="<?=$key?>" id="property_<?=$key?>"<?=$checked ? " checked=\"checked\"" : ""?> /><label for="property_<?=$key?>"><?=$arEnum["VALUE"]?></label><br />
+							<input class="form-control" type="<?=$type?>" name="PROPERTY[<?=$propertyID?>]<?=$type == "checkbox" ? "[".$key."]" : ""?>" value="<?=$key?>" id="property_<?=$key?>"<?=$checked ? " checked=\"checked\"" : ""?> /><label for="property_<?=$key?>"><?=$arEnum["VALUE"]?></label><br />
 											<?
 										}
 									break;
@@ -333,39 +348,42 @@ if ($arResult["MESSAGE"] <> ''):?>
 								endswitch;
 							break;
 						endswitch;?>
-					</td>
-				</tr>
+					
+					<div class="invalid-feedback d-block" style="width: 100%;">
+                 <?
+					 if($arResult["ERRORS"]){
+						 foreach($arResult["ERRORS"] as $err){
+							 if(strrpos($err,$propName )){
+								echo $err;
+							}if (strrpos($err,'тип файла') && $propertyID == 'PREVIEW_PICTURE' ) {
+								echo $err;
+							}
+					 	}	
+					}	 
+				 ?>
+				 
+				 </div>
+			   </div>
 			<?endforeach;?>
-			<?if($arParams["USE_CAPTCHA"] == "Y" && $arParams["ID"] <= 0):?>
-				<tr>
-					<td><?=GetMessage("IBLOCK_FORM_CAPTCHA_TITLE")?></td>
-					<td>
-						<input type="hidden" name="captcha_sid" value="<?=$arResult["CAPTCHA_CODE"]?>" />
-						<img src="/bitrix/tools/captcha.php?captcha_sid=<?=$arResult["CAPTCHA_CODE"]?>" width="180" height="40" alt="CAPTCHA" />
-					</td>
-				</tr>
-				<tr>
-					<td><?=GetMessage("IBLOCK_FORM_CAPTCHA_PROMPT")?><span class="starrequired">*</span>:</td>
-					<td><input type="text" name="captcha_word" maxlength="50" value=""></td>
-				</tr>
-			<?endif?>
-		</tbody>
+
+		
 		<?endif?>
-		<tfoot>
-			<tr>
-				<td colspan="2">
-					<input type="submit" name="iblock_submit" value="<?=GetMessage("IBLOCK_FORM_SUBMIT")?>" />
+		<hr class="mb-4">
+			
+				
+					<input  class="btn btn-primary btn-lg btn-block" type="submit" name="iblock_submit" value="<?=GetMessage("IBLOCK_FORM_SUBMIT")?>" />
 					<?if ($arParams["LIST_URL"] <> ''):?>
-						<input type="submit" name="iblock_apply" value="<?=GetMessage("IBLOCK_FORM_APPLY")?>" />
-						<input
+						<input class="btn btn-primary btn-lg btn-block" type="submit" name="iblock_apply" value="<?=GetMessage("IBLOCK_FORM_APPLY")?>" />
+						<input 
+							class="btn btn-primary btn-lg btn-block"
 							type="button"
 							name="iblock_cancel"
 							value="<? echo GetMessage('IBLOCK_FORM_CANCEL'); ?>"
 							onclick="location.href='<? echo CUtil::JSEscape($arParams["LIST_URL"])?>';"
 						>
 					<?endif?>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-</form>
+				
+					</form>
+        </div>
+      </div>
+
