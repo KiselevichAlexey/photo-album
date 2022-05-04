@@ -12,75 +12,62 @@
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 ?>
-<?$ElementID = $APPLICATION->IncludeComponent(
-	"bitrix:photo.detail",
-	"",
-	Array(
-		"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
-		"IBLOCK_ID" => $arParams["IBLOCK_ID"],
-		"META_KEYWORDS" => $arParams["META_KEYWORDS"],
-		"META_DESCRIPTION" => $arParams["META_DESCRIPTION"],
-		"BROWSER_TITLE" => $arParams["BROWSER_TITLE"],
-		"SET_LAST_MODIFIED" => $arParams["SET_LAST_MODIFIED"],
-		"FIELD_CODE" => $arParams["DETAIL_FIELD_CODE"],
-		"PROPERTY_CODE" => $arParams["DETAIL_PROPERTY_CODE"],
-		"DISPLAY_PANEL" => $arParams["DISPLAY_PANEL"],
-		"SET_TITLE" => $arParams["SET_TITLE"],
-		"MESSAGE_404" => $arParams["MESSAGE_404"],
-		"SET_STATUS_404" => $arParams["SET_STATUS_404"],
-		"SHOW_404" => $arParams["SHOW_404"],
-		"FILE_404" => $arParams["FILE_404"],
-		"USE_PERMISSIONS" => $arParams["USE_PERMISSIONS"],
-		"GROUP_PERMISSIONS" => $arParams["GROUP_PERMISSIONS"],
-		"CACHE_TYPE" => $arParams["CACHE_TYPE"],
-		"CACHE_TIME" => $arParams["CACHE_TIME"],
-		"CACHE_GROUPS" => $arParams["CACHE_GROUPS"],
-		"ELEMENT_SORT_FIELD" => $arParams["ELEMENT_SORT_FIELD"],
-		"ELEMENT_SORT_ORDER" => $arParams["ELEMENT_SORT_ORDER"],
 
-		"SECTION_ID" => $arResult["VARIABLES"]["SECTION_ID"],
-		"SECTION_CODE" => $arResult["VARIABLES"]["SECTION_CODE"],
-		"ELEMENT_ID" => $arResult["VARIABLES"]["ELEMENT_ID"],
-		"ELEMENT_CODE" => $arResult["VARIABLES"]["ELEMENT_CODE"],
-		"SECTION_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["section"],
-		"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["detail"],
-	),
-	$component
-);?>
-<?if($arParams["USE_RATING"]=="Y" && $ElementID):?>
-<br />
+<?
+$rsSections = CIBlockSection::GetList(array(),array('IBLOCK_ID' => $arParams ['IBLOCK_ID'], '=CODE' => $arResult['VARIABLES']['SECTION_CODE']));
+if ($arSection = $rsSections->Fetch())
+{
+}?>
 <?$APPLICATION->IncludeComponent(
-	"bitrix:iblock.vote",
-	"",
-	Array(
-		"IBLOCK_TYPE" => $arParams["IBLOCK_TYPE"],
+	"bitrix:iblock.element.add.form", 
+	"template1", 
+	array(
+		"CUSTOM_TITLE_DATE_ACTIVE_FROM" => "",
+		"CUSTOM_TITLE_DATE_ACTIVE_TO" => "",
+		"CUSTOM_TITLE_DETAIL_PICTURE" => "",
+		"CUSTOM_TITLE_DETAIL_TEXT" => "",
+		"CUSTOM_TITLE_IBLOCK_SECTION" => "",
+		"CUSTOM_TITLE_NAME" => "",
+		"CUSTOM_TITLE_PREVIEW_PICTURE" => "Фотография",
+		"CUSTOM_TITLE_PREVIEW_TEXT" => "",
+		"CUSTOM_TITLE_TAGS" => "",
+		"DEFAULT_INPUT_SIZE" => "30",
+		"DETAIL_TEXT_USE_HTML_EDITOR" => "N",
+		"ELEMENT_ASSOC" => "CREATED_BY",
+		"GROUPS" => array(
+			0 => "3",
+			1 => "4",
+		),
 		"IBLOCK_ID" => $arParams["IBLOCK_ID"],
-		"ELEMENT_ID" => $ElementID,
-		"MAX_VOTE" => $arParams["MAX_VOTE"],
-		"VOTE_NAMES" => $arParams["VOTE_NAMES"],
-		"CACHE_TYPE" => $arParams["CACHE_TYPE"],
-		"CACHE_TIME" => $arParams["CACHE_TIME"],
+		"IBLOCK_TYPE" =>  $arParams["IBLOCK_TYPE"],
+		"IBLOCK_SECTION_ID" =>  $arSection['ID'],
+		"LEVEL_LAST" => "Y",
+		"LIST_URL" => "",
+		"MAX_FILE_SIZE" => "0",
+		"MAX_LEVELS" => "100000",
+		"MAX_USER_ENTRIES" => "100000",
+		"PREVIEW_TEXT_USE_HTML_EDITOR" => "N",
+		"PROPERTY_CODES" => array(
+			0 => "NAME",
+			1 => "PREVIEW_PICTURE",
+		),
+		"PROPERTY_CODES_REQUIRED" => array(
+			0 => "NAME",
+			1 => "PREVIEW_PICTURE",
+		),
+		"RESIZE_IMAGES" => "Y",
+		"SEF_MODE" => "N",
+		"STATUS" => "ANY",
+		"STATUS_NEW" => "N",
+		"USER_MESSAGE_ADD" => "",
+		"USER_MESSAGE_EDIT" => "",
+		"USE_CAPTCHA" => "N",
+		"AJAX_MODE" => "Y",
+		"AJAX_OPTION_SHADOW" => "N",
+		"AJAX_OPTION_JUMP" => "N",
+		"AJAX_OPTION_STYLE" => "Y",
+		"AJAX_OPTION_HISTORY" => "N",
+		"COMPONENT_TEMPLATE" => "template1"
 	),
 	$component
 );?>
-<?endif?>
-<?if($arParams["USE_REVIEW"]=="Y" && IsModuleInstalled("forum") && $ElementID):?>
-<br />
-<?$APPLICATION->IncludeComponent(
-	"bitrix:forum.topic.reviews",
-	"",
-	Array(
-		"CACHE_TYPE" => $arParams["CACHE_TYPE"],
-		"CACHE_TIME" => $arParams["CACHE_TIME"],
-		"MESSAGES_PER_PAGE" => $arParams["MESSAGES_PER_PAGE"],
-		"USE_CAPTCHA" => $arParams["USE_CAPTCHA"],
-		"PATH_TO_SMILE" => $arParams["PATH_TO_SMILE"],
-		"FORUM_ID" => $arParams["FORUM_ID"],
-		"URL_TEMPLATES_READ" => $arParams["URL_TEMPLATES_READ"],
-		"SHOW_LINK_TO_FORUM" => $arParams["SHOW_LINK_TO_FORUM"],
-		"ELEMENT_ID" => $ElementID,
-		"URL_TEMPLATES_DETAIL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["detail"],
-	),
-	$component
-);?>
-<?endif?>
